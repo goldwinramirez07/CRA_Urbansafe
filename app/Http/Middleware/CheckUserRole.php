@@ -15,6 +15,8 @@ class CheckUserRole
      */
     public function handle(Request $request, Closure $next): Response
     {
+        //Write if else for role 
+
         return $next($request);
     }
 }
