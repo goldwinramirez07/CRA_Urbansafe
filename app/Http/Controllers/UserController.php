@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Auth\Events\Registered;
 use App\Models\User;
 
 class UserController extends Controller
@@ -24,8 +25,10 @@ class UserController extends Controller
             'role' => $request->role,
         ]);
 
-        // Auth::login($user);
-        return redirect('/login')->with('success', 'Account created succesfully');
+        event(new Registered($user));
+        
+        Auth::login($user);
+        return redirect()->route('verification.notice');
     }
 
     public function userLogin(Request $request) {
