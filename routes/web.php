@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\GuestController;
+use App\Http\Controllers\PostController;
 use Illuminate\Http\Request;
 
 Route::get('/', function () {
@@ -38,3 +39,6 @@ Route::post('/email/verification-notification', function (Request $request){
 Route::get('/dashboard', function () {
     return view('/users/dashboard');
 })->middleware(['auth', 'verified']);
+
+Route::post('/posts', [PostController::class, 'addpost'])->name('posts.store')->middleware('auth');
+// Route::delete('/posts/{id}', [PostController::class, 'delpost'])->name('posts.delete')->middleware('auth');
