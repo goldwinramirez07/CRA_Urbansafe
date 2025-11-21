@@ -4,7 +4,13 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\GuestController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\UserDashboardController;
 use Illuminate\Http\Request;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
+use Illuminate\Support\Facades\Auth;
+
+// Auth::routes(['verify' => true]);
 
 Route::get('/', function () {
     return view('index');
@@ -17,18 +23,16 @@ Route::get('/register', [GuestController::class, 'showRegister'])->name('registe
 Route::post('/register', [UserController::class, 'register'])->name('register.submit');
 //End of Landing Page routes
 
-//User Login Routes
-Route::post('/logout', [UserController::class, 'userLogout'])->name('logout.submit');
-//End of Login Routes
 
 //Verification Routes
 Route::get('/email/verify', function() {
     return view('auth.verify-email');
 })->middleware('auth')->name('verification.notice');
-Route::get('email/verify/{id}/{hash}', function (Request $request){
+Route::get('email/verify/{id}/{hash}', function (EmailVerificationRequest $request){
    $request->fulfill();
-   return redirect('/dashboard')->with('success', 'Email verified!');
+   return redirect('/dashboard')->with('verified', true);
 })->middleware(['auth','signed'])->name('verification.verify');
+
 Route::post('/email/verification-notification', function (Request $request){
     $request->user()->sendEmailVerificationNotification();
     return back()->with('message', 'Verification  link sent');
@@ -36,9 +40,12 @@ Route::post('/email/verification-notification', function (Request $request){
 //End of Verification Routes
 
 //User Routes
-Route::get('/dashboard', function () {
-    return view('/users/dashboard');
-})->middleware(['auth', 'verified']);
+Route::get('/user/dashboard', [UserDashboardController::class, 'index'])
+    ->name('user.dashboard')
+    ->middleware(['auth', 'verified']);
+Route::post('/logout', [UserController::class, 'logout'])->name('user.logout')->middleware('auth');
 
+Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index')->middleware('auth');
+Route::get('/posts', [PostController::class, 'viewposts'])->name('posts.view')->middleware('auth');
 Route::post('/posts', [PostController::class, 'addpost'])->name('posts.store')->middleware('auth');
 // Route::delete('/posts/{id}', [PostController::class, 'delpost'])->name('posts.delete')->middleware('auth');

@@ -3,7 +3,7 @@
 
 @section('content')
     <center>
-        <div class="bg-white p-8 rounded shadow-md w-96 text-center">
+        <div class="mt-6 bg-white p-8 rounded shadow-md w-96 text-center">
             <h1 class="text-2xl font-bold mb-5">Email Verification</h1>
             <p class="text-lg">Please check your inbox and click the verification link we sent to your email.</p>
             <p class="text-sm mb-4">check spam if mail is not showing in inbox.</p>

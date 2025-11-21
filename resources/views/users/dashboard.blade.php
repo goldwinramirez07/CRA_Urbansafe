@@ -1,31 +1,50 @@
 @extends('layouts.app')
 
-
 @section('content')
-<div class="container mx-auto">
-    <h1 class="text-lg hover:underline">Welcome User's Name{{-- User Name--}}</h1>
+<div class="flex min-h-screen">
 
-    <div>
-        <button class="bg-color-red text-md">Report Fire</button>
-        <button class="bg-color-green text-md">Report Accident</button>
-        <button class="bg-color-blue text-md">Report Crime</button>
-        <button class="bg-color-orange text-md">Report Flood</button>
-    </div>
+    {{-- Sidebar --}}
+    @include('components.sidebar')
 
-    <div>
-        <a href="{{--Forum page--}}">Here's what you've missed</a>
-    {{-- @foreach() --}}
-            <div>
-                <h3>{{-- {{User's Name}} --}}'s Post</h3>
-                <p>{{-- {{Post Title}}--}}</p>
-                <p class="text-sm text-color-gray 500">{{-- {{Date Posted}} --}}</p>
-            </div>
-    {{-- @endforeach --}}
-    </div>
+    {{-- Main Content --}}
+    <div class="flex-1 p-6">
+        <h1 class="text-lg hover:underline mb-4">
+            Welcome <strong>{{ auth()->user()->name }}</strong>
+        </h1>
 
-    <div>
-        <h2>Need to contact authorities?</h2>
-         <p>Hotlines: {{-- {{ if available }} --}}</p> 
+        {{-- Quick Report Buttons --}}
+        <div class="space-x-2 mb-6">
+            <button class="bg-red-600 text-white px-4 py-2 rounded">Report Fire</button>
+            <button class="bg-green-600 text-white px-4 py-2 rounded">Report Accident</button>
+            <button class="bg-blue-600 text-white px-4 py-2 rounded">Report Crime</button>
+            <button class="bg-orange-600 text-white px-4 py-2 rounded">Report Flood</button>
+        </div>
+
+        {{-- Posts Preview --}}
+        <div class="mb-6">
+            <a href="{{ route('posts.view') }}" class="underline text-blue-600">Here's what you've missed</a>
+
+            @foreach ($posts as $post)
+                <div class="mt-3 p-4 bg-white shadow rounded">
+                    <h3 class="font-semibold">{{ $post->title }}</h3>
+                    <p>{{ Str::limit($post->content, 100) }}</p>
+                    <p class="text-sm text-gray-500">
+                        {{ $post->created_at->diffForHumans() }}
+                    </p>
+                </div>
+            @endforeach
+
+            @if ($posts->isEmpty())
+                <p class="text-gray-500 mt-3">You're up to date!</p>
+            @endif
+        </div>
+
+        {{-- Hotline Section --}}
+        <div>
+            <h2 class="font-semibold text-lg mb-1">Need to contact authorities?</h2>
+            <p>Hotlines: {{-- showing soon --}}</p>
+        </div>
+
     </div>
 
 </div>

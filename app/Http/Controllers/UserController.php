@@ -9,7 +9,6 @@ use App\Models\User;
 
 class UserController extends Controller
 {
-    
     public function register(Request $request) {
         $request->validate([
             'name' => 'required|string|max:255',
@@ -25,7 +24,7 @@ class UserController extends Controller
             'role' => $request->role,
         ]);
 
-        event(new Registered($user));
+        $user->sendEmailVerificationNotification();
         
         Auth::login($user);
         return redirect()->route('verification.notice');
@@ -43,7 +42,7 @@ class UserController extends Controller
             if (Auth::user()->role === "admin") {
                 return redirect('/index');
             } else {
-                return redirect('/users/dashboard');
+                return redirect('/user/dashboard');
             }
         }
 
@@ -56,9 +55,13 @@ class UserController extends Controller
         Auth::logout();
 
         $request->session()->invalidate();
-        $request->sessino()->regenerateToken();
+        $request->session()->regenerateToken();
 
         return redirect('/users/login');
+    }
+
+    public function profile() {
+        return view('users.profile.view');
     }
     
 }

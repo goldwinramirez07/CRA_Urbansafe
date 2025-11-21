@@ -6,8 +6,8 @@
     <title>@yield('title', 'UrbanSafe')</title>
     @vite('resources/css/app.css')
 </head>
-<body class="bg-gray-100 min-h-screen flex flex-col">
-    <main class="flex-grow">
+<body class="bg-gray-100 min-h-screen">
+    <main>
         @yield('content')
     </main>
 </body>
