@@ -21,6 +21,11 @@ Route::get('/login',[GuestController::class, 'showLogin'])->name('login');
 Route::post('/login', [UserController::class, 'userLogin'])->name('login.submit');
 Route::get('/register', [GuestController::class, 'showRegister'])->name('register');
 Route::post('/register', [UserController::class, 'register'])->name('register.submit');
+Route::get('/report',[GuestController::class, 'showreport'])->name('report.show');
+Route::get('/report/fire', [GuestController::class, 'firereport'])->name('report.fire');
+Route::get('/report/accident', [GuestController::class, 'accidentreport'])->name('report.accident');
+Route::get('/report/crime', [GuestController::class, 'floodreport'])->name('report.flood');
+Route::get('/report/flood', [GuestController::class, 'crimereport'])->name('report.report');
 //End of Landing Page routes
 
 

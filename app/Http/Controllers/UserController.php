@@ -57,7 +57,7 @@ class UserController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect('/users/login');
+        return redirect('/');
     }
 
     public function profile() {
