@@ -22,10 +22,10 @@ Route::post('/login', [UserController::class, 'userLogin'])->name('login.submit'
 Route::get('/register', [GuestController::class, 'showRegister'])->name('register');
 Route::post('/register', [UserController::class, 'register'])->name('register.submit');
 Route::get('/report',[GuestController::class, 'showreport'])->name('report.show');
-Route::get('/report/fire', [GuestController::class, 'firereport'])->name('report.fire');
-Route::get('/report/accident', [GuestController::class, 'accidentreport'])->name('report.accident');
-Route::get('/report/crime', [GuestController::class, 'floodreport'])->name('report.flood');
-Route::get('/report/flood', [GuestController::class, 'crimereport'])->name('report.report');
+Route::get('/report/fire', [GuestController::class, 'showFireReport'])->name('report.fire');
+Route::get('/report/accident', [GuestController::class, 'showAccidentReport'])->name('report.accident');
+Route::get('/report/crime', [GuestController::class, 'showFloodReport'])->name('report.flood');
+Route::get('/report/flood', [GuestController::class, 'showCrimeReport'])->name('report.report');
 //End of Landing Page routes
 
 
@@ -54,3 +54,8 @@ Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index
 Route::get('/posts', [PostController::class, 'viewposts'])->name('posts.view')->middleware('auth');
 Route::post('/posts', [PostController::class, 'addpost'])->name('posts.store')->middleware('auth');
 // Route::delete('/posts/{id}', [PostController::class, 'delpost'])->name('posts.delete')->middleware('auth');
+
+Route::post('/report/fire', [GuestController::class, 'submitFireReport'])->name('guest.fire.submit');
+Route::post('/report/flood', [GuestController::class, 'submitFloodReport'])->name('guest.flood.submit');
+Route::post('/report/crime', [GuestController::class, 'submitCrimeReport'])->name('guest.crime.submit');
+Route::post('/report/accident', [GuestController::class, 'submitAccidentReport'])->name('guest.accident.submit');
