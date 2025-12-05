@@ -9,7 +9,6 @@
         @include('components.report-form', [
             'action' => route('guest.accident.submit'),
             'label' => 'Accident',
-            'location' => $location ?? null
         ])
 
     </div>

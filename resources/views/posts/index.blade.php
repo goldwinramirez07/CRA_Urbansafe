@@ -7,7 +7,6 @@
 
     <div class="bg-white shadow-md rounded-lg p-6 mb-6 mt-4">
         <h2 class="text-lg font-semibold mb-4">Create post</h2>
-    </div>
 
     <form action="{{ route('posts.store') }} " method="POST">
         @csrf
@@ -29,28 +28,26 @@
             <button class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 py-2 rounded-lg">Post</button>
         </div>
     </form>
+    </div>
 
-    {{-- @foreach ('') Loop the acquired posts--}}
-
+    @foreach ($posts as $post) 
     <div class="bg-white shadow-md rounded-lg p-6 mb-4">
         <h2 class="text-xl font-semibold mb-2">
-            {{-- <a href="route for obtaining post by ID"> class="text-blue-600 hover:underline--}}
-                {{-- {{"Post tile"}} --}}
+            <a href="route for obtaining post by ID"> class="text-blue-600 hover:underline">
+                {{ $post->title }} 
         </h2>
-
         <p class="text-gray-700 mb-3">
-            {{-- {{"post details"}} --}}
+            {{ $post->body}}
         </p>
-
         <div class="text-sm text-gray-500 flex justify-between items-center">
-            {{-- <span>{{"User who posted and time and date"}}</span> --}}
-            {{-- <a href={{"Post details route"}} class="text-blue-500 hover:text-blue-700"></a> --}}
+            <span>{{ $post->user_id }}</span>
+            <a href={{ route('posts.details')}} class="text-blue-500 hover:text-blue-700"></a>
         </div>
     </div>
-    {{-- @endforeach --}}
+    @endforeach
 
     <div class="mt-4">
-        {{-- {{"paginate?"}} --}}
+        {{ $posts->links() }}
     </div>
 
 </div>

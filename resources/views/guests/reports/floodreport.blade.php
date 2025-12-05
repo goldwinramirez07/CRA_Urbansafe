@@ -9,7 +9,6 @@
         @include('components.report-form', [
             'action' => route('guest.flood.submit'),
             'label' => 'Flood',
-            'location' => $location ?? null
         ])
 
     </div>

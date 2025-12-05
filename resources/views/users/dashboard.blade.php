@@ -14,10 +14,10 @@
 
         {{-- Quick Report Buttons --}}
         <div class="space-x-2 mb-6">
-            <button class="bg-red-600 text-white px-4 py-2 rounded">Report Fire</button>
-            <button class="bg-green-600 text-white px-4 py-2 rounded">Report Accident</button>
-            <button class="bg-blue-600 text-white px-4 py-2 rounded">Report Crime</button>
-            <button class="bg-orange-600 text-white px-4 py-2 rounded">Report Flood</button>
+            <a href="/report/fire"><button class="bg-red-600 text-white px-4 py-2 rounded">Report Fire</button></a>
+            <a href="/report/accident"><button class="bg-green-600 text-white px-4 py-2 rounded">Report Accident</button></a>
+            <a href="/report/crime"><button class="bg-blue-600 text-white px-4 py-2 rounded">Report Crime</button></a>
+            <a href="/report/flood"><button class="bg-orange-600 text-white px-4 py-2 rounded">Report Flood</button></a>
         </div>
 
         {{-- Posts Preview --}}

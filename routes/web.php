@@ -6,11 +6,13 @@ use App\Http\Controllers\GuestController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserDashboardController;
+use App\Http\Controllers\Auth\ForgotPasswordController;
+use App\Http\Controllers\Auth\ResetPasswordController;
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Support\Facades\Auth;
 
-// Auth::routes(['verify' => true]);
+Auth::routes(['verify' => true]);
 
 Route::get('/', function () {
     return view('index');
@@ -21,6 +23,10 @@ Route::get('/login',[GuestController::class, 'showLogin'])->name('login');
 Route::post('/login', [UserController::class, 'userLogin'])->name('login.submit');
 Route::get('/register', [GuestController::class, 'showRegister'])->name('register');
 Route::post('/register', [UserController::class, 'register'])->name('register.submit');
+Route::get('/forgot-password', [ForgotPasswordController::class, 'showLinkRequestForm'])->name('password.request');
+Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
+Route::get('/reset-password/{token}', [ResetPasswordController::class, 'showResetForm'])->name('password.reset');
+Route::post('/reset-password', [ResetPasswordController::class,'reset'])->name('password.update');
 Route::get('/report',[GuestController::class, 'showreport'])->name('report.show');
 Route::get('/report/fire', [GuestController::class, 'showFireReport'])->name('report.fire');
 Route::get('/report/accident', [GuestController::class, 'showAccidentReport'])->name('report.accident');
@@ -52,6 +58,7 @@ Route::post('/logout', [UserController::class, 'logout'])->name('user.logout')->
 
 Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index')->middleware('auth');
 Route::get('/posts', [PostController::class, 'viewposts'])->name('posts.view')->middleware('auth');
+Route::get('/posts/{id}', [PostController::class, 'postdetails'])->name('posts.details')->middleware('auth');
 Route::post('/posts', [PostController::class, 'addpost'])->name('posts.store')->middleware('auth');
 // Route::delete('/posts/{id}', [PostController::class, 'delpost'])->name('posts.delete')->middleware('auth');
 

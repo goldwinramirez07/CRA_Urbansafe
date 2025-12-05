@@ -13,6 +13,11 @@ class PostController extends Controller
         return view('posts.index', compact('posts'));
     }
 
+    public function postdetails($id) {
+        $post = Post::findOrFail($id);
+        return view('posts.details', compact('post'));
+    }
+
     public function addpost(Request $request) {
         $request->validate([
             'title' => 'required|string|max:140',

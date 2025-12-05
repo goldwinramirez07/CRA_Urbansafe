@@ -9,7 +9,6 @@
         @include('components.report-form', [
             'action' => route('guest.fire.submit'),
             'label' => 'Fire',
-            'location' => $location ?? null
         ])
 
     </div>

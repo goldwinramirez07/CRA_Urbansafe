@@ -15,6 +15,8 @@ class UserController extends Controller
             'email' => 'required|email|unique:users,email',
             'password' => 'required|min:8|confirmed',
             'role' => 'required|in:admin,user',
+        ], [
+            'email.unique' => 'This email is already registered.'
         ]);
 
         $user = User::create([
