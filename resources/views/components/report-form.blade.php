@@ -7,14 +7,15 @@
 
         <input type="hidden" name="latitude" id="latitude">
         <input type="hidden" name="longitude" id="longitude">
+        <input type="hidden" name="location" id="location">
 
         <label class="block mt-4">Date & Time</label>
         <input type="text" class="w-full p-2 border rounded" value="{{ now() }}" disabled>
         <input type="hidden" name="datetime" value="{{ now() }}">
 
         <label class="block mt-4">Location</label>
-        <input type="text" id="location_display" class="w-full p-2 border rounded" value="{{ $location ?? 'Location Unavailable' }}" disabled>
-        <input type="hidden" name="location" value="{{ $location ?? '' }}">
+        <input type="text" id="location_display" class="w-full p-2 border rounded"
+            value="{{ $location ?? 'Location Unavailable' }}" disabled>
 
         <label class="block mt-4">Description <span class="text-sm">(optional)</span></label>
         <textarea name="description" rows="4" class="w-full p-2 border rounded"></textarea>
@@ -28,39 +29,42 @@
     </form>
 </div>
 
-
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        if(!navigator.geolocation) {
-            document.getElementById('location_display').value = "Geolocation is not supported, please allow access location access.";
+    document.addEventListener('DOMContentLoaded', function() {
+
+        let display = document.getElementById('location_display');
+
+        if (!navigator.geolocation) {
+            display.value = "Geolocation not supported by your browser.";
             return;
         }
 
-        navigator.geolocation.getCurrentPosition(sucess, error);
+        navigator.geolocation.getCurrentPosition(success, geoError);
 
-        function sucess(pos) {
-            let lat =pos.coords.latitude;
+        function success(pos) {
+            let lat = pos.coords.latitude;
             let lon = pos.coords.longitude;
 
-            docuemnt.getElementById('latitude').value = lat;
+            document.getElementById('latitude').value = lat;
             document.getElementById('longitude').value = lon;
 
-            let locationiq = {{ config('services.locationiq.key') }};
-            let url = 'https://us1.locationiq.com/v1/reverse?key=${apiKey}&lat=${lat}&lon=${lon}&format=json`;
+            let apiKey = "{{ config('services.locationiq.key') }}";
+            let url = `https://us1.locationiq.com/v1/reverse?key=${apiKey}&lat=${lat}&lon=${lon}&format=json`;
 
             fetch(url)
                 .then(res => res.json())
                 .then(data => {
-                    let address = data.display_name ?? "Uknown Location";
-                    document.getElementById('location_display').value = address;
-                    document.getelementById('location').value = address;
+                    let address = data.display_name ?? "Unknown Location";
+                    display.value = address;
+                    document.getElementById('location').value = address;
                 })
                 .catch(() => {
-                    document.getElementById('location_display').value = "Unable To retrieve location";
+                    display.value = "Unable to retrieve location.";
                 });
+        }
 
-        function error(err) {
-            docuemnt.getElemenetById('location_display').value = "Location access is prohibited..";
+        function geoError() {
+            display.value = "Location access denied.";
         }
 
     });

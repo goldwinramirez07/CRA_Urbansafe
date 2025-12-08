@@ -1,6 +1,13 @@
 @extends('layouts.app')
 
 @section('content')
+
+{{-- After report section --}}
+@if(session('success'))
+    <div class="p-4 text-green-900 bg-green-200 rounded">
+        {{ session('success') }}
+    </div>
+@endif
 <div class="flex min-h-screen">
 
     {{-- Sidebar --}}
@@ -48,4 +55,6 @@
     </div>
 
 </div>
+
+
 @endsection

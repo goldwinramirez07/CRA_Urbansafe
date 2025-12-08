@@ -6,19 +6,14 @@ use Illuminate\Http\Request;
 use App\Models\Report;
 
 
+
 class GuestController extends Controller
 {
     public function reverseGeocode(Request $request) {
-        // $lat = $request->lat;
-        // $lng = $request->lng;
-
-        // $url = 'https://www.googleapis.com/geolocation/v1/geolocate';
-        // $data = json_decode(file_get_contents($url), true);
-
-        // return response()->json([
-        //     'address' => $data['display_name'] ?? 'Unknown location',
-        // ]);
-        // Will review HTML5 Geolocation API to be implemented later
+       $request->validate([
+           'latitude' => 'required|numeric',
+           'longitude' => 'required|numeric',
+       ]);
     }
 
     public function showLogin () {
@@ -33,7 +28,7 @@ class GuestController extends Controller
         return view('guests.reports.report');
     }
 
-    public function showFireReport() {
+    public function showFireReport(Request $request) {
         return view('guests.reports.firereport');
     }
 
@@ -66,15 +61,20 @@ class GuestController extends Controller
     }
 
     private function saveReport(Request $request, $type) {
+
         $request->validate([
             'description' => 'nullable|string',
-            'media'       => 'nullable|file|mimes:jpg,jpeg,png,mp4|max:20480',
+            'media'       => 'nullable|file|mimes:jpg,jpeg,png,mp4|max:20480|required',
+            'latitude'    => 'required|numeric',
+            'longitude'   => 'required|numeric',
+            'location'    => 'required|string',
         ]);
 
         $path = null;
         if ($request->hasFile('media')) {
             $path = $request->file('media')->store('reports', 'public');
         }
+
 
         Report::create([
             'report_type' => $type,
@@ -84,10 +84,10 @@ class GuestController extends Controller
             'datetime' => $request->datetime,
             'description' => $request->description,
             'media_path' => $path,
-            'user_id' => auth()->id() ?? null,
+            'user_id' => auth()->id(),
         ]);
 
-        return back()->with('success', 'Report has been submitted!');
+        return redirect()->route('user.dashboard')->with('success', "Report submitted successfully.");
     }
 
 }
