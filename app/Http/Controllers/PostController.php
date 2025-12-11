@@ -5,17 +5,20 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Post;
+use App\Models\Comment;
 
 class PostController extends Controller
 {
-    public function index() {
+    public function viewPosts() {
         $posts = Post::latest()->paginate(10);
-        return view('posts.index', compact('posts'));
+        $comment = Comment::latest()->paginate(10);
+        return view('posts.index', compact('posts', 'comment'));
     }
 
     public function postdetails($id) {
         $post = Post::findOrFail($id);
-        return view('posts.details', compact('post'));
+        $comments = Comment::latest()->where('post_id', $id)->paginate(10);
+        return view('posts.post', compact('post'));
     }
 
     public function addpost(Request $request) {
@@ -25,22 +28,22 @@ class PostController extends Controller
         ]);
 
         Post::Create([
-            'user_id' => Auth::id(),
-            'title' => $request->input('title'),
-            'content' => $request->input('content'),
+            'user_id' => auth()->user()->id,
+            'title' => $request->title,
+            'body' => $request->content,
         ]);
         return redirect()->back()->with('success', 'Post created!');
     }
     
-    // public function delpost($id) {
-    //     $post = Post::findorfail($id);
+    public function delpost($id) {
+        $post = Post::findorfail($id);
 
-    //     if ($post->user_id !== Auth::id()) {
-    //         abort(403, 'Unauthorized action.');
-    //     }
+        if ($post->user_id !== Auth::id()) {
+            abort(403, 'Unauthorized action.');
+        }
 
-    //     $post->delete();
+        $post->delete();
 
-    //     return redirect()->back()->with('success', 'Post deleted');
-    // }
+        return redirect()->route('posts.view')->with('success', 'Post deleted');
+    }
 }

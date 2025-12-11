@@ -57,10 +57,12 @@ Route::get('/user/dashboard', [UserDashboardController::class, 'index'])
 Route::post('/logout', [UserController::class, 'logout'])->name('user.logout')->middleware('auth');
 
 Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index')->middleware('auth');
-Route::get('/posts', [PostController::class, 'viewposts'])->name('posts.view')->middleware('auth');
+Route::get('/posts', [PostController::class, 'viewPosts'])->name('posts.view')->middleware('auth');
 Route::get('/posts/{id}', [PostController::class, 'postdetails'])->name('posts.details')->middleware('auth');
 Route::post('/posts', [PostController::class, 'addpost'])->name('posts.store')->middleware('auth');
-// Route::delete('/posts/{id}', [PostController::class, 'delpost'])->name('posts.delete')->middleware('auth');
+Route::get('/posts/{id}/edit', [PostController::class, 'editPost'])->name('posts.edit')->middleware('auth');
+Route::post('/posts/{id}/update', [PostController::class,'updatePost'])->name('posts.update')->middleware('auth');
+Route::delete('/posts/{id}', [PostController::class, 'delpost'])->name('posts.delete')->middleware('auth');
 
 Route::post('/report/fire', [GuestController::class, 'submitFireReport'])->name('guest.fire.submit');
 Route::post('/report/flood', [GuestController::class, 'submitFloodReport'])->name('guest.flood.submit');
