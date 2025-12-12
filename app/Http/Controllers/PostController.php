@@ -11,14 +11,13 @@ class PostController extends Controller
 {
     public function viewPosts() {
         $posts = Post::latest()->paginate(10);
-        $comment = Comment::latest()->paginate(10);
-        return view('posts.index', compact('posts', 'comment'));
+        return view('posts.index', compact('posts'));
     }
 
     public function postdetails($id) {
         $post = Post::findOrFail($id);
         $comments = Comment::latest()->where('post_id', $id)->paginate(10);
-        return view('posts.post', compact('post'));
+        return view('posts.post', compact('post', 'comments'));
     }
 
     public function addpost(Request $request) {

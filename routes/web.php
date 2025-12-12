@@ -8,6 +8,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserDashboardController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\ResetPasswordController;
+use App\Http\Controllers\CommentController;
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Support\Facades\Auth;
@@ -57,6 +58,7 @@ Route::get('/user/dashboard', [UserDashboardController::class, 'index'])
 Route::post('/logout', [UserController::class, 'logout'])->name('user.logout')->middleware('auth');
 
 Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index')->middleware('auth');
+
 Route::get('/posts', [PostController::class, 'viewPosts'])->name('posts.view')->middleware('auth');
 Route::get('/posts/{id}', [PostController::class, 'postdetails'])->name('posts.details')->middleware('auth');
 Route::post('/posts', [PostController::class, 'addpost'])->name('posts.store')->middleware('auth');
@@ -68,3 +70,7 @@ Route::post('/report/fire', [GuestController::class, 'submitFireReport'])->name(
 Route::post('/report/flood', [GuestController::class, 'submitFloodReport'])->name('guest.flood.submit');
 Route::post('/report/crime', [GuestController::class, 'submitCrimeReport'])->name('guest.crime.submit');
 Route::post('/report/accident', [GuestController::class, 'submitAccidentReport'])->name('guest.accident.submit');
+
+Route::post('/posts/{id}/comments', [CommentController::class,'addcomment'])->name('comments.add')->middleware('auth');
+Route::post('/comments/{id}/edit', [CommentController::class,'updatecomment'])->name('comments.update')->middleware('auth');
+Route::delete('/comments/{id}', [CommentController::class, 'deletecomment'])->name('comments.delete')->middleware('auth');
