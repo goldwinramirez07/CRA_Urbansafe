@@ -9,7 +9,7 @@
 
                 @auth
                     @if ($post->user_id === auth()->id())
-                        <div x-data="{ open: false }" class="absolute top-4 right-4">
+                        <div x-data="{ open: false, modal: false }" class="absolute top-4 right-4">
                             <button @click="open = !open">
                                 <svg xmlns="http://www.w3.org/2000/svg"
                                     class="h-6 w-6 text-gray-600 hover:text-gray-800 cursor-pointer" fill="none"
@@ -21,9 +21,10 @@
 
                             <div x-show="open" @click.away="open = false" x-transition
                                 class="absolute right-0 mt-2 w-32 bg-white border rounded shadow-md z-50">
-
-                                <a href="{{ route('posts.edit', $post->id) }}"
-                                    class="block px-4 py-2 text-sm hover:bg-gray-100">Edit</a>
+                                <button @click="modal = true; open = false"
+                                    class="block w-full text-left px-4 py-2 text-sm hover:bg-gray-100">
+                                    Edit
+                                </button>
 
                                 <form action="{{ route('posts.delete', $post->id) }}" method="POST">
                                     @csrf
@@ -33,6 +34,33 @@
                                     </button>
                                 </form>
                             </div>
+
+                            <div x-show="modal" @click.self="modal = false" x-transition
+                                class="fixed inset-0 bg-black/20 backdrop-blur-sm flex items-center justify-center z-50">
+                                <div class="bg-white p-6 rounded-lg shadow-lg w-[32rem]">
+
+                                    <h2 class="text-xl font-semibold mb-4">Edit Post</h2>
+
+                                    <form action="{{ route('posts.update', $post->id) }}" method="POST">
+                                        @csrf
+                                        @method('POST')
+                                        <input type="text" name="title" value="{{ $post->title }}"
+                                            class="w-full p-3 border rounded-lg mb-4" />
+
+                                        <textarea name="body" rows="5" class="w-full p-3 border rounded-lg mb-4">{{ $post->body }}</textarea>
+
+                                        <div class="flex justify-end space-x-2">
+                                            <button type="button" @click="modal = false" class="px-4 py-2 rounded-lg border">
+                                                Cancel
+                                            </button>
+
+                                            <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-lg">
+                                                Save
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
                         </div>
                     @endif
                 @endauth
@@ -41,6 +69,10 @@
 
                 <p class="text-sm text-gray-500 mb-4">
                     Posted By: <strong>{{ $post->user->name }}</strong>
+                </p>
+
+                <p class="text-xxs font-semibold text-gray-600 mb-4">
+                    Posted At: {{ $post->created_at }}
                 </p>
 
                 <p class="text-gray-800 mb-4 leading-relaxed">{{ $post->body }}</p>
@@ -66,7 +98,7 @@
                                                 </svg>
                                             </button>
 
-                                            
+
                                             <div x-show="open" @click.away="open = false"
                                                 class="absolute right-0 mt-2 w-32 bg-white border rounded shadow-md z-50">
 

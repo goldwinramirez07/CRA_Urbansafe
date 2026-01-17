@@ -45,4 +45,24 @@ class PostController extends Controller
 
         return redirect()->route('posts.view')->with('success', 'Post deleted');
     }
+
+    public function updatePost(Request $request, $id) {
+        $post = Post::findOrFail($id);
+
+        if ($post->user_id !== Auth::id()) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $request->validate([
+            'title' => 'required|string|max:140',
+            'content' => 'required|string|max:500',
+        ]);
+
+        $post->update([
+            'title' => $request->title,
+            'body' => $request->content,
+        ]);
+
+        return redirect()->route('posts.details', $id)->with('success', 'Post updated!');
+    }
 }
